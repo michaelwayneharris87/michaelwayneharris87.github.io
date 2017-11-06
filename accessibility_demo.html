@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Accessibility Demo</title>
+	<style>
+		.element-invisible {
+			position: absolute !important;
+			height: 1px;
+			width: 1px;
+			overflow: hidden;
+			clip: rect(1px 1px 1px 1px);
+			clip: rect(1px, 1px, 1px, 1px);
+		}
+		
+		.element-invisible.element-focusable:active, .element-invisible.element-focusable:focus {
+    		position: static !important;
+   			clip: auto;
+  			overflow: visible;
+    		height: auto;
+		}
+		
+		/** Resets **/
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		
+		#main-content:focus {
+			outline: none;
+		}
+		
+		/** Layout **/		
+		.container {
+			width: 1000px;
+			margin: auto;
+		}
+		
+		.col {
+		float:left;
+		margin-left: 10px;
+		margin-right: 10px;
+		}
+		
+		.col-1 {width: 80px;}
+		.col-2 {width: 180px;}
+		.col-3 {width: 280px;}
+		.col-4 {width: 380px;}
+		.col-5 {width: 480px;}
+		.col-6 {width: 580px;}
+		.col-7 {width: 680px;}
+		.col-8 {width: 780px;}
+		.col-9 {width: 880px;}
+		.col-10 {width: 980px;}
+		
+		.row {
+			clear:both;
+			overflow: auto;
+			padding-bottom: 5px;
+		}
+		
+		footer .container-inner {
+			border-top: 1px solid #ccc;
+			margin-top: 3em;
+			padding-bottom: 2em;
+		}
+		
+		.form-control {
+			margin-bottom: 0.75em;
+		}
+		
+		/** Typography **/
+		body {
+			font-size: 100%;
+			line-height: 1.5;
+		}
+		
+		p {
+			margin-bottom: 1.5em;
+		}
+		
+		.nofocus * {
+			outline: none !important;3
+		}
+		
+		.graytext {
+			background-color: #ccc;
+			color: 	#333;
+		}
+		
+		.colorblind .graytext {
+			background-color: #ccc;
+			color: 	#757575;		
+		}
+		
+		.red-green-text {
+			background-color: #004D00;
+			color: #FF9494;
+		}
+		
+		.colorblind .red-green-text {
+			background-color: #009400;
+			color: #ff0000;
+		}
+		
+		.code {
+			background-color: #FAF3E5;
+			display: inline-block;
+			padding: 10px;
+		}
+		
+		form {
+			outline: 2px solid #ccc;
+			padding: 20px;
+		}
+		
+		/** Tables **/
+		table {
+			border: 1px solid black;
+			width: 250px;
+			margin-bottom: 3em;
+			border-collapse: collapse;
+		}
+
+		th {
+			background-color: #ddd;
+		}
+
+		th:first-of-type {
+			text-align: left;
+			border: 1px solid black;
+		}
+
+		td {
+			border: 1px solid black;
+		}
+
+		td:last-of-type {
+			text-align: center;
+			width: 100px
+		}
+
+		table .broken {
+			background-color: #ff0000;
+			color: white;
+		}
+
+
+		table .warning {
+			background-color: #AD7100;
+			color: white;
+		}
+
+		table .ok {
+			background-color: #009400;
+			color: white;
+		}
+
+		caption {
+			text-align: left;
+			font-weight: bold;
+		}
+		
+		/** Links **/
+		a[href] {
+			color: blue;
+		}
+		
+		button:focus, a:focus, input:focus, textarea:focus {
+			outline: 2px solid blue;
+		}
+		
+		input[type="radio"]:focus {
+			outline: none;
+		}
+		
+		.accessible-form  input[type="radio"]:focus:checked + * {
+			outline: 2px solid blue;
+		}
+		
+		.accessible-form  input[type="radio"]:not(:checked):focus + * {
+			outline: 2px solid blue;
+		}
+		
+		.mouse-input .accessible-form  input[type="radio"]:focus:checked + * {
+			outline: none;
+		}
+		
+		.mouse-input .accessible-form  input[type="radio"]:not(:checked):focus + * {
+			outline: none;
+		}
+		
+		.colorblind a {
+			text-decoration: none;
+			color: #00356b;
+		}
+		
+		.colorblind a:hover {
+			text-decoration: none;
+			color: black;
+		}
+		
+		.mouse-input button:focus,
+		.mouse-input a:focus {
+			outline: none;
+		}
+		
+		/** Components: Main Menu **/
+		.main_menu__list {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			background-color: #aaa;
+		}
+		
+		.main_menu__list_item {
+			flex-grow: 1;
+			text-align: center;	
+			margin: 10px;
+		}
+		
+		.main_menu__list_item a {
+			text-decoration: none;
+			display: block;
+			background-color: #ddd;
+			padding: 10px 0;
+			color: black;
+		}
+		
+		.main_menu__list_item a:hover,
+		.main_menu__list_item a:focus {
+			outline: 2px solid blue;
+			background-color: #ddddff;
+		}
+		
+		.mouse-input .main_menu__list_item a:focus {
+			outline: none;
+		}
+		
+		/** Component Modal **/
+		.has-modal .modals {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: rgba(0,0,0,0.25);
+			width: 100%;
+			height: 100vh;
+		}
+		
+		.has-modal {
+			overflow: hidden;
+		}
+		
+		.dialog.dialog-hidden {
+			display:none;
+		}
+		
+		.dialog.dialog-visible {
+			display:block;
+		}
+		
+		.dialog {
+			width: 50%;
+			margin: 0 auto;
+			background-color: white;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+			border: 2px solid #444;
+			padding: 25px 50px 25px;
+		}
+
+		.dialog_heading {
+			margin-top: 0;
+			line-height: 1;
+		}
+
+		.dialog_dismiss_button {
+			display: block;
+			margin-top: 1em;
+		}
+		
+		/** Component Tab Panel **/
+		.tab_wrapper {
+			border: 1px solid #888;
+			border-radius: 5px;
+			background-color: #ddd;
+		}
+		
+		.tab_list {
+			list-style: none;
+			padding-left: 0px;
+			margin-bottom: 0px;
+			padding-top: 2px;
+			overflow: auto;
+		}
+		
+		.accessible-tabs {
+			background-color: #99cc99;
+		}
+		
+		.inaccessible-tabs {
+			background-color: #cc9999;
+		}
+		
+		.tab {
+			display: block;
+			float: left;
+			margin: 0 8px;
+			padding: 5px 10px;
+			background-color: #e5d2a9;
+			border: 2px solid #e5d2a9;
+			border-bottom: 0px;
+			border-top-right-radius: 2px;
+			border-top-left-radius: 2px;
+			cursor: default;
+			box-sizing: border-box;
+		}
+		
+		.tab:focus {
+			outline: 2px solid blue;
+		}
+		
+		.mouse-input .tab:focus {
+			outline: none;
+		}
+		
+		.tab.active-tab {
+			background-color: #ECE1C5;
+			border: 2px solid black;
+			border-bottom: 0px;
+		}
+		 
+		.tab_panels {
+			background-color: #ECE1C5;
+		}
+		
+		.tab_panel {
+			overflow: hidden;
+			padding: 8px;
+		}
+		
+		.tab_panel:focus {
+			outline: 2px solid blue;
+		}
+		
+		.mouse-input .tab_panel:focus {
+			outline: none;
+		}
+		
+		.tab_panel.panel-active {
+			display: block;
+		}
+		
+		.tab_panel.panel-hidden {
+			display: none;
+		}
+		
+	</style>
+</head>
+<body>
+<div class="page-wrapper">
+<header role="banner">
+	<a class="element-invisible element-focusable" href="#main-content">Skip to main content</a>
+	<div class="container">
+		<div class="row">
+			<div class="col col-10">
+				<h1 class="site-title">Accessibility Demo</h1>
+			</div>
+		</div>
+	</div>
+</header>
+<main id="main-content" tabindex="-1" role="main">
+	<div class="container">
+		<div class="row">
+			<div class="col col-10">
+				<h2>Designing for colorblindness and low vision</h2>
+				<h3>Link styling</h2>
+				<p>People with color blindness benefit from high color contrast and non-color styles, such as underlines for links.</p>
+				<ul>
+					<li><a href="#">This is a link</a></li>
+					<li><a href="#">This is a link</a></li>
+					<li><a href="#">This is a link</a></li>
+					<li><a href="#">This is a link</a></li>
+					<li><a href="#">This is a link</a></li>
+				</ul>
+				<p>The quick brown fox <a href="#">jumped</a> over the lazy dog.</p>
+				<h3>Adequate color contrast</h3>
+				<p class="graytext">Dark gray text on a light gray background</p>
+				<code class="code">
+				.enough-color-contrast {
+					background-color: #ccc;
+					color: 	#333;
+				}<br/>
+		
+				.not-enough-color-contrast {
+					background-color: #ccc;
+					color: 	#757575;		
+				}
+				</code>
+				<p class="red-green-text">Red text on a green background</p>
+				<code class="code">
+				.enough-color-contrast {
+					background-color: #004D00;
+					color: #FF9494;
+				}<br/>
+		
+				.not-enough-color-contrast {
+					background-color: #009400;
+					color: #ff0000;
+				}
+				</code><br/><br/>
+				<button data-widget-wrapper="ToggleClass" data-toggle-class="colorblind" data-toggle-element="body">Toggle colorblindness styling styling</button>
+				<h3>Using color to convey information</h3>
+				<p>While it's helpful to use color to convey information, color alone should not be used. Always use some non-color indicator for information, to help users who are blind or colorblind.</p>
+				<table class="accessible-table">
+					<caption>An accessible use of color</caption>
+					<thead>
+						<tr>
+							<th scope="col">System</th>
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>System 1</th>
+							<td class="broken">Offline</th>
+						</tr>
+						<tr>
+							<td>System 2</th>
+							<td class="broken">Offline</th>
+						</tr>
+						<tr>
+							<td>System 3</th>
+							<td class="warning">Warning</th>
+						</tr>
+						<tr>
+							<td>System 4</th>
+							<td class="ok">Online</th>
+						</tr>
+					</tbody>
+				</table>
+				<table class="inaccessible-table">
+					<caption>An inaccessible use of color</caption>
+					<thead>
+						<tr>
+							<th scope="col">System</th>
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>System 1</th>
+							<td class="broken"></th>
+						</tr>
+						<tr>
+							<td>System 2</th>
+							<td class="broken"></th>
+						</tr>
+						<tr>
+							<td>System 3</th>
+							<td class="warning"></th>
+						</tr>
+						<tr>
+							<td>System 4</th>
+							<td class="ok"></th>
+						</tr>
+					</tbody>
+				</table>
+				<hr />
+				<h2>Focus Styling</h2>
+				<p>People who use a keyboard rely heavily on focus styling, since they cannot use a mouse. They usethe "tab" key on the keyboard to cycle through links, buttons, and form controls on the page.</p>
+				<button data-widget-wrapper="ToggleClass" data-toggle-class="nofocus" data-toggle-element="body">Toggle focus styling</button> 
+				<hr />
+				<h2>Modals</h2>
+				<p>Modals are a good illustration of why it is important to manage focus. When the modal is launched, focus should be placed on the first focusable element in the modal. Furthermore, focus should be trapped within the modal, so after tabbing past the last focusable element, focus is set on the first focusable element. Finally, when the modal is dismissed, focus should be placed back on the element that spawned the modal. The modal should be dismissed by pressing the ESCAPE key or when pressing a dismiss button.</p>
+				<h3>Accessible Modal</h3>
+				<button data-widget-wrapper="ModalLaunchButton" data-modal-accessible="true" data-modal-number="1">Launch an accessible modal</button>
+				<h3>Inaccessible Modal</h3>
+				<button data-widget-wrapper="ModalLaunchButton" data-modal-accessible="false" data-modal-number="2">Launch an inaccessible modal</button>
+				<hr />
+				<h2>Tab Panel Widget</h2>
+				<p>Developers often remember to make tab panels operable to mouse click, but not to keyboard. For such a widget, focus should go to the currently active tab, then the currently active panel, then to any focusable elements within the tab panel. When focused on the tab, the arrow keys should move focus to the other tabs, and (in most cases) should automatically activate the tab.</p>
+				<h3>Accessible Tabs</h3>
+				<div data-widget-wrapper="TabWidget" class="accessible-tabs" data-tabs-accessible="true">
+					<ul data-widget="tab_list">
+						<li data-widget="tab">UX</li>
+						<li data-widget="tab">CMS</li>
+						<li data-widget="tab">Custom Apps</li>
+						<li data-widget="tab">Accessibility</li>
+					</ul>
+					<div data-widget="tab_panels">
+						<div data-widget="tab_panel">
+							<h3>UX Team</h3>
+							<p>Taber's team. They design things.</p>
+						</div>
+						<div data-widget="tab_panel">
+							<h3>CMS Team</h3>
+							<p>Franz's team. They build things using a CMS.</p>
+						</div>
+						<div data-widget="tab_panel">
+							<h3>Custom Apps</h3>
+							<p>Oren's Team. They build custom apps.</p>
+						</div>
+						<div data-widget="tab_panel">
+							<h3>Accessibility</h3>
+							<p>TBD.</p>
+						</div>
+					</div>
+				</div>
+				<h3>Inaccessible Tabs</h3>
+				<div data-widget-wrapper="TabWidget" class="inaccessible-tabs" data-tabs-accessible="false">
+					<ul data-widget="tab_list">
+						<li data-widget="tab">Hemsworths</li>
+						<li data-widget="tab">Kardashians</li>
+						<li data-widget="tab">Gyllenhaals</li>
+					</ul>
+					<div data-widget="tab_panels">
+						<div data-widget="tab_panel">
+							<h3>Hemsworths</h3>
+							<ul>
+								<li>Chris</li>
+								<li>Luke</li>
+								<li>Liam</li>
+							</ul>
+						</div>
+						<div data-widget="tab_panel">
+							<h3>Kardashians</h3>
+							<ul>
+								<li>Kourtney Kardashian</li>
+								<li>Kim Kardashian</li>
+								<li>Khlo&eacute Kardashian</li>
+								<li>Rob Kardashian</li>
+								<li>Kendall Jenner</li>
+								<li>Kylie Jenner</li>
+							</ul>
+						</div>
+						<div data-widget="tab_panel">
+							<h3>Gyllenhasls</h3>
+							<ul>
+								<li>Maggie</li>
+								<li>Jake</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<h2>Forms</h2>
+				<p>Form controls should have accessible names, usually through a label programmatically associated to the element. If a label is appropriately associated with the control, clicking the label will move focus to the control, and activate the control in certain cases.</p>
+				<h3>Accessible Form</h3>
+				<form class="accessible-form">
+					<div class="form-control">
+						<label>Accessible text input<br/><input /></label>
+					</div>
+					<div class="form-control">
+						<label>Accessible text input<br/><textarea rows="4" cols="50"></textarea></label>
+					</div>
+					<div class="form-control">
+						<fieldset>
+							<legend>What is your favorite kind of form control?</legend>
+							<div><input type="radio" id="choice1" name="accessibleradio" value="first"><label for="choice1">Radio</label></div>
+							<div><input type="radio" id="choice2" name="accessibleradio" value="second"><label for="choice2">Button</label></div>
+							<div><input type="radio" id="choice3" name="accessibleradio" value="third"><label for="choice3">Text input</label></div>
+						</fieldset>
+					</div>
+				</form>
+				<h3>Inaccessible Form</h3>
+				<form>
+					<div class="form-control">
+						<span>Inccessible text input<br/><input /></span>
+					</div>
+					<div class="form-control">
+						<span>Inaccessible text input<br/><textarea rows="4" cols="50"></textarea></span>
+					</div>
+					<div class="form-control">
+						<fieldset>
+							<legend>What is your favorite kind of form control?</legend>
+							<div><input type="radio" id="choice4" name="inaccessibleradio" value="first"><span>Radio</span></div>
+							<div><input type="radio" id="choice5" name="inaccessibleradio" value="second"><span>Button</span></div>
+							<div><input type="radio" id="choice6" name="inaccessibleradio" value="third"><span>Text input</span></div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</main>
+
+<footer role="contentinfo">
+	<div class="container">
+		<div class="container-inner">
+			<div class="row">
+				<div class="col col-10">
+					<p>Check out <a href="http://accessibility.yale.edu">Our accessibility website</a> for more.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+</div>
+<div id="modals" class="modals">
+	<div data-widget="dialog" data-dialog-number="1">
+		<h2 data-widget="dialog_heading">Modal Heading</h2>
+		<p data-widget="dialog_description">This is an accessible modal. Focus is trapped inside the modal, and you can use the ESCAPE key to dismiss the modal.</a></p>
+		<ul>
+			<li><a href="#">This is a link</a></li>
+			<li><a href="#">This is a link</a></li>
+			<li><a href="#">This is a link</a></li>
+		</ul>
+		<button data-widget="dialog_dismiss_button">Dismiss the Checkbox</button>
+	</div>
+	<div data-widget="dialog" data-dialog-number="2">
+		<h2 data-widget="dialog_heading">Modal Heading</h2>
+		<p data-widget="dialog_description">This is an inaccessible modal. You must tab through the entire page in order to get to the modal.</p>
+		<ul>
+			<li><a href="#">This is a link</a></li>
+			<li><a href="#">This is a link</a></li>
+			<li><a href="#">This is a link</a></li>
+		</ul>
+		<button data-widget="dialog_dismiss_button">Dismiss the Checkbox</button>
+	</div>
+</div>
+
+<script>
+
+var ToggleClass = function(domNode, widgetNumber) {
+	this.domNode = domNode;
+	this.widgetID = widgetNumber;
+	
+	this.toggleClass = false;
+	this.toggleElement = false;
+}
+
+ToggleClass.prototype.init = function() {
+	this.toggleClass = this.domNode.getAttribute('data-toggle-class');
+	this.toggleElement = document.querySelector(this.domNode.getAttribute('data-toggle-element'));
+	this.domNode.addEventListener('click', this.clickEventListener.bind(this));
+}
+
+ToggleClass.prototype.clickEventListener = function(e) {
+	this.toggleElement.classList.toggle(this.toggleClass);
+}
+
+var ModalLaunchButton = function(domNode, widgetNumber) {
+	this.domNode = domNode;
+	this.widgetID = widgetNumber;
+	
+	this.modalAccessible = false;
+	this.dialog = false;
+}
+
+ModalLaunchButton.prototype.init = function() {
+	this.domNode.setAttribute('id', 'widget-' + this.widgetID);
+	this.domNode.setAttribute('data-widget-number', this.widgetID);
+	this.domNode.addEventListener('click', this.clickEventListener.bind(this));
+	
+	var modalNumber = this.domNode.getAttribute("data-modal-number");
+	var dialog = document.querySelector('[data-dialog-number="' + modalNumber + '"]');
+	
+	if (dialog) {
+		this.dialog = new Dialog(dialog, this);
+		this.dialog.init();
+	}
+	
+	this.modalAccessible = (this.domNode.getAttribute("data-modal-accessible") == 'true');
+}
+
+ModalLaunchButton.prototype.clickEventListener = function(e) {
+	document.body.classList.add('has-modal');
+	this.dialog.domNode.classList.add('dialog-visible');
+	this.dialog.domNode.classList.remove('dialog-hidden');
+	
+	if (this.modalAccessible) {
+		this.dialog.domNode.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')[0].focus();
+	}
+}
+
+var Dialog = function(domNode, controller) {
+	this.domNode = domNode;
+	this.controller = controller;
+	
+	this.dialogHeading = false;
+	this.dialogDescription = false;
+	this.dialogDismissButton = false;
+}
+
+Dialog.prototype.init = function() {
+	this.domNode.setAttribute('role', 'dialog');
+	this.domNode.setAttribute('aria-modal', 'true')
+	this.domNode.setAttribute('id', "widget-" + this.controller.widgetID + "-modal");
+	this.domNode.setAttribute('aria-labelledby', "widget-" + this.controller.widgetID + "-dialogHeading");
+	this.domNode.setAttribute('aria-describedby', "widget-" + this.controller.widgetID + "-dialogDescription");
+	this.domNode.classList.add('dialog');
+	this.domNode.classList.add('dialog-hidden');
+	
+	var dialogHeading = this.domNode.querySelector('[data-widget="dialog_heading"]');
+	if (dialogHeading) {
+		this.dialogHeading = new DialogHeading(dialogHeading, this);
+		this.dialogHeading.init();
+	}
+	
+	var dialogDescription = this.domNode.querySelector('[data-widget="dialog_description"]');
+	if (dialogDescription) {
+		this.dialogDescription = new DialogDescription(dialogDescription, this);
+		this.dialogDescription.init();
+	}
+	
+	var dialogDismissButton = this.domNode.querySelector('[data-widget="dialog_dismiss_button"]');
+	if (dialogDismissButton) {
+		this.dialogDismissButton = new DialogDismissButton(dialogDismissButton, this);
+		this.dialogDismissButton.init();
+	}
+	
+	this.tab = 9;
+	this.esc = 27;
+	this.domNode.addEventListener('keydown', this.keydownEventListener.bind(this));
+}
+
+Dialog.prototype.dismiss = function() {
+	document.body.classList.remove('has-modal');
+	this.domNode.classList.remove('dialog-visible');
+	this.domNode.classList.add('dialog-hidden');
+	if (this.controller.modalAccessible) {
+		this.controller.domNode.focus();
+	}
+}
+
+Dialog.prototype.keydownEventListener = function(e) {
+	var focusables = this.domNode.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+	
+	if (this.controller.modalAccessible) {
+		switch (e.keyCode) {
+			case this.tab:
+				if (e.target == focusables[0] && e.shiftKey) {
+					e.preventDefault();
+					focusables[focusables.length - 1].focus();
+				} else if (e.target == focusables[focusables.length - 1] && !e.shiftKey) {
+					e.preventDefault();
+					focusables[0].focus();
+				}
+				break;
+			case this.esc:
+				e.preventDefault();
+				this.dismiss();
+		}
+	}
+}
+
+var DialogHeading = function(domNode, container) {
+	this.domNode = domNode;
+	this.container = container;
+}
+
+DialogHeading.prototype.init = function() {
+	this.domNode.setAttribute('id', "widget-" + this.container.controller.widgetID + "-dialogHeading");
+	this.domNode.classList.add('dialog_heading');
+}
+
+var DialogDescription = function(domNode, container) {
+	this.domNode = domNode;
+	this.container = container;
+}
+
+DialogDescription.prototype.init = function() {
+	this.domNode.setAttribute('id', "widget-" + this.container.controller.widgetID + "-dialogDescription");
+	this.domNode.classList.add('dialog_description');
+}
+
+var DialogDismissButton = function(domNode, container) {
+	this.domNode = domNode;
+	this.container = container;
+}
+
+DialogDismissButton.prototype.init = function() {
+	this.domNode.setAttribute('id', "widget-" + this.container.controller.widgetID + "-dialogDismissButton");
+	this.domNode.classList.add('dialog_dismiss_button');
+	
+	this.domNode.addEventListener('click',  this.clickEventListener.bind(this));
+}
+
+DialogDismissButton.prototype.clickEventListener = function(e) {
+	this.container.dismiss();
+}
+
+var TabWidget =  function(domNode, widgetNumber) {
+	this.domNode = domNode;	
+	this.widgetID = widgetNumber;
+	
+	this.tabList = false;
+	this.tabPanels = false;
+	
+	this.activeNumber = false;
+	
+	this.tabsAccessible = false;
+}
+
+TabWidget.prototype.init = function() {
+	this.domNode.setAttribute('id', 'widget-' + this.widgetID); 
+	this.domNode.setAttribute('data-widget-number', this.widgetID);
+	this.domNode.classList.add('tab_wrapper');
+	
+	var tabList = this.domNode.querySelector('[data-widget="tab_list"]');
+	var tabPanels = this.domNode.querySelector('[data-widget="tab_panels"]');
+	
+	this.tabsAccessible = (this.domNode.getAttribute("data-tabs-accessible") == 'true');
+	
+	if (tabList) {
+		this.tabList = new TabList(tabList, this);
+		this.tabList.init();
+	}
+	
+	if (tabPanels) {
+		this.tabPanels = new TabPanels(tabPanels, this);
+		this.tabPanels.init();
+	}
+	
+	this.activeNumber = 0;
+}
+
+TabWidget.prototype.updatePanel = function() {
+	for (i = 0; i < this.tabList.tabs.length; i++) {
+		tab = this.tabList.tabs[i];
+		panel = this.tabPanels.panels[i];
+		if (tab.tabNumber == this.activeNumber) {
+			tab.makeActive();
+			tab.domNode.focus();
+			panel.makeActive();
+		}
+		
+		else {
+			tab.makeInactive();
+			panel.makeInactive();
+		}
+	}
+}
+
+var TabList = function(domNode, container) {
+	this.domNode = domNode;
+	this.container = container;
+	this.tabs = false;
+	
+	this.keys = {
+    	end: 35,
+    	home: 36,
+    	left: 37,
+    	up: 38,
+    	right: 39,
+    	down: 40,
+    	delete: 46
+	};
+}
+
+TabList.prototype.init = function() {
+	this.domNode.classList.add('tab_list');
+	
+	var tabs = this.domNode.querySelectorAll('[data-widget="tab"]');
+	
+	if (tabs) {
+		this.tabs = []
+		for (j = 0; j < tabs.length; j++) {
+			var tab = new Tab(tabs[j], j, this);
+			tab.init();
+			this.tabs.push(tab);
+		}
+		
+		this.tabs[0].makeActive();
+	}
+}
+
+var Tab = function(domNode, tabNumber, container) {
+	this.domNode = domNode;
+	this.container = container;
+	this.tabNumber = tabNumber;
+}
+
+Tab.prototype.init = function() {
+	this.domNode.setAttribute('role', 'tab');
+	this.domNode.setAttribute('aria-selected','false');
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', -1);
+	}
+	this.domNode.classList.add('tab');
+	this.domNode.setAttribute("id", "widget-" + this.container.container.widgetID + "-tab-" + this.tabNumber);
+	
+	this.domNode.addEventListener('click', this.clickEventListener.bind(this));
+	  this.domNode.addEventListener('keydown', this.keydownEventListener.bind(this));
+}
+
+Tab.prototype.makeActive = function() {
+	this.domNode.setAttribute('aria-selected','true');
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', 0);
+	}
+	this.domNode.classList.add('active-tab');	
+}
+
+Tab.prototype.makeInactive = function() {
+	this.domNode.setAttribute('aria-selected','false');
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', -1);
+	}
+	this.domNode.classList.remove('active-tab');	
+}
+
+Tab.prototype.clickEventListener = function(e) {
+	this.container.container.activeNumber = this.tabNumber;
+	this.container.container.updatePanel();
+}
+
+Tab.prototype.keydownEventListener = function(e) {
+	switch (e.keyCode) {
+		case this.container.keys.left:
+		case this.container.keys.down:
+			e.preventDefault();
+			this.container.container.activeNumber--;
+			if (this.container.container.activeNumber < 0) {
+				this.container.container.activeNumber = this.container.tabs.length - 1;
+			}
+			break;
+		case this.container.keys.right:
+		case this.container.keys.up:
+				e.preventDefault();
+			this.container.container.activeNumber++;
+			if (this.container.container.activeNumber >= this.container.tabs.length) {
+				this.container.container.activeNumber = 0;;
+			}
+			break;
+		case this.container.keys.end:
+			e.preventDefault();
+			this.container.container.activeNumber = this.container.tabs.length - 1;
+			break;
+		case this.container.keys.home:
+			e.preventDefault();
+			this.container.container.activeNumber = 0;
+			break;
+	}
+	
+	this.container.container.updatePanel();
+}
+
+var TabPanels = function(domNode, container) {
+	this.domNode = domNode;
+	this.container = container;
+	this.panels = false;
+}
+
+TabPanels.prototype.init = function() {
+	this.domNode.classList.add('tab_panels');
+
+	var panels = this.domNode.querySelectorAll('[data-widget="tab_panel"]');
+	
+	if (panels) {
+		this.panels = []
+		for (j = 0; j < panels.length; j++) {
+			var panel = new Panel(panels[j], j, this);
+			panel.init();
+			this.panels.push(panel);
+		}
+		
+		this.panels[0].makeActive();
+	}
+}
+var Panel = function(domNode, panelNumber, container) {
+	this.domNode = domNode;
+	this.panelNumber = panelNumber;
+	this.container = container;
+}
+Panel.prototype.init = function() {
+	this.domNode.setAttribute('role', 'tabpanel')
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', -1);
+	}
+	this.domNode.classList.add('tab_panel');
+	this.domNode.classList.add('panel-hidden');
+	this.domNode.setAttribute('aria-labelledby', 'widget-' + this.container.container.widgetID + "-tab-" + this.panelNumber);
+}
+Panel.prototype.makeActive = function() {
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', 0);
+	}
+	this.domNode.classList.remove('panel-hidden');
+	this.domNode.classList.add('panel-active');
+}
+Panel.prototype.makeInactive = function() {
+	if (this.container.container.tabsAccessible) {
+		this.domNode.setAttribute('tabindex', -1);
+	}
+	this.domNode.classList.remove('panel-active');
+	this.domNode.classList.add('panel-hidden');	
+}
+var widgets = document.querySelectorAll('[data-widget-wrapper]');
+for (i = 0; i < widgets.length; i++) {
+	widget = widgets[i];
+	widgetInit(widget, i);
+}
+function widgetInit(domNode, i) {
+	constructor = domNode.getAttribute('data-widget-wrapper');
+	widget = new window[constructor](domNode, i)
+	widget.init();
+}
+document.body.addEventListener('mousedown', function(e) {
+	this.classList.add('mouse-input');
+});
+document.body.addEventListener('keydown', function(e) {
+	this.classList.remove('mouse-input');
+});
+</script>
+</body>
+</html>
